@@ -4,6 +4,7 @@ import os
 from base64 import urlsafe_b64encode
 from uuid import uuid4
 
+from redis import Redis
 from sentry.nodestore.base import NodeStorage
 from sentry.utils.kvstore.redis import RedisKVStorage
 
@@ -25,6 +26,8 @@ class RedisNodeStorage(NodeStorage):
     """
 
     store_class = RedisKVStorage
+    
+    default_ttl =None
 
     def __init__(
         self,
@@ -35,14 +38,14 @@ class RedisNodeStorage(NodeStorage):
         default_ttl=None,
         **client_options,
         ):
-        self.store = self.store_class(
+        self.store = self.store_class(Redis(
             host=host,
             port=port,
             db=db,
             password=password,
-            default_ttl=default_ttl,
             client_options=client_options,
-        )
+        ))
+        self.default_ttl = default_ttl
         self.skip_deletes = "_SENTRY_CLEANUP" in os.environ
 
     def delete(self, id):
