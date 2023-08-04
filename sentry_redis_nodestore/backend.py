@@ -36,14 +36,12 @@ class RedisNodeStorage(NodeStorage):
         db=0,
         password=None,
         default_ttl=None,
-        **client_options,
         ):
         self.store = self.store_class(Redis(
             host=host,
             port=port,
             db=db,
             password=password,
-            client_options=client_options,
         ))
         self.default_ttl = default_ttl
         self.skip_deletes = "_SENTRY_CLEANUP" in os.environ
