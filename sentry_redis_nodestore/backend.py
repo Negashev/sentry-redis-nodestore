@@ -27,7 +27,7 @@ class RedisNodeStorage(NodeStorage):
 
     store_class = RedisKVStorage
     
-    default_ttl =None
+    default_ttl = None
 
     def __init__(
         self,
@@ -44,6 +44,8 @@ class RedisNodeStorage(NodeStorage):
             password=password,
         ))
         self.default_ttl = default_ttl
+        if default_ttl == None:
+            self.default_ttl = 86400
         self.skip_deletes = "_SENTRY_CLEANUP" in os.environ
 
     def delete(self, id):
