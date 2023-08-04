@@ -78,6 +78,8 @@ class RedisNodeStorage(NodeStorage):
         """
         >>> nodestore.set('key1', b"{'foo': 'bar'}")
         """
+        if ttl == None:
+            ttl = self.default_ttl
         self.store.set(id, data, ttl=ttl)
 
     def generate_id(self):
